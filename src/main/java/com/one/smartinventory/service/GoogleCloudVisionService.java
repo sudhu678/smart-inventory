@@ -105,8 +105,8 @@ public class GoogleCloudVisionService {
         String[] tokens = tokenizer.tokenize(content.replaceAll("text|image",""));
         String[] tags = posTagger.tag(tokens);
         for (int i = 0; i < tags.length; i++) {
-            if (tags[i].equals("NNP") || tags[i].equals("NNPS")|| tags[i].equals("NN") || tags[i].equals("NNS")) {
-                if (tokens[i].length() > 2) {
+            if (tokens[i].length() > 2) {
+                if (tags[i].equals("NNP") || tags[i].equals("NNPS") || tags[i].equals("NN") || tags[i].equals("NNS")) {
                     texts.add(tokens[i].toLowerCase());
                 }
             }
