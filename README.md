@@ -15,9 +15,7 @@ The stores commonly re-shuffle their products to get customer attractions and bo
 * Application Default Credentials (Authentication for Google Cloud)
 
 #### Project Build
-./gradlew build
-      or
-IntelliJ or Eclipse project build
+./gradlew build or IntelliJ/Eclipse project build
 
 
 ### Reference Documentation
@@ -28,6 +26,7 @@ For further reference, please consider the following sections:
 * [Spring Boot Gradle Plugin Reference Guide](https://docs.spring.io/spring-boot/docs/3.2.5/gradle-plugin/reference/html/)
 * [Create an OCI image](https://docs.spring.io/spring-boot/docs/3.2.5/gradle-plugin/reference/html/#build-image)
 * [Vertex AI Gemini](https://docs.spring.io/spring-ai/reference/api/clients/vertexai-gemini-chat.html)
+* [Open NLP](https://manual.openlp.org/)
 
 ### Additional Links
 
