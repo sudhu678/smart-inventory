@@ -27,6 +27,10 @@ on browser hit http://localhost:8080/swagger-ui/index.html#/
 * Product Controller: Provides endpoints to access product information and online order fulfillment
 ![image](https://github.com/sudhu678/smart-inventory/assets/28265483/f9a61176-7d6b-4c82-9b52-e1be01b8ce62)
 
+* Area Controller: Provides endpoints to access inventory areas, hot spots, freeze area to exclude from reshuffling plan
+![image](https://github.com/sudhu678/smart-inventory/assets/28265483/340d8904-9120-4f6b-b7f6-b5e7fb1b9f7a)
+
+
 
 ### Reference Documentation
 
