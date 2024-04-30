@@ -14,6 +14,12 @@ The stores commonly re-shuffle their products to get customer attractions and bo
 * Google Cloud Project Setup (Access Vision AI)
 * Application Default Credentials (Authentication for Google Cloud)
 
+#### Project Build
+./gradlew build
+      or
+IntelliJ or Eclipse project build
+
+
 ### Reference Documentation
 
 For further reference, please consider the following sections:
