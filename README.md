@@ -33,6 +33,10 @@ on browser hit http://localhost:8080/swagger-ui/index.html#/
 * Vision Controller: Provides endpoints to upload image for designated aisle and trigger Vision AI
 ![image](https://github.com/sudhu678/smart-inventory/assets/28265483/b67e90b7-4190-4bfc-a599-afe6871a0985)
 
+* Plan Controller: Provides endpoints to generate product reshuffling plan by product stock, expiry, and product view
+![image](https://github.com/sudhu678/smart-inventory/assets/28265483/f45d4c0b-fe08-4989-b573-71626e040412)
+
+
 
 ### Reference Documentation
 
