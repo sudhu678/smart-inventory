@@ -24,12 +24,14 @@ on browser hit http://localhost:8080/swagger-ui/index.html#/
 
 ### Important Rest APIs
 
-* Product Controller: Provides endpoints to access product information and online order fulfillment
+* Product Controller: Provides endpoints to create, access product information and online order fulfillment
 ![image](https://github.com/sudhu678/smart-inventory/assets/28265483/f9a61176-7d6b-4c82-9b52-e1be01b8ce62)
 
-* Area Controller: Provides endpoints to access inventory areas, hot spots, freeze area to exclude from reshuffling plan
+* Area Controller: Provides endpoints to create, access inventory areas, hot spots, freeze area to exclude from the reshuffling plan
 ![image](https://github.com/sudhu678/smart-inventory/assets/28265483/340d8904-9120-4f6b-b7f6-b5e7fb1b9f7a)
 
+* Vision Controller: Provides endpoints to upload image for designated aisle and trigger Vision AI
+![image](https://github.com/sudhu678/smart-inventory/assets/28265483/b67e90b7-4190-4bfc-a599-afe6871a0985)
 
 
 ### Reference Documentation
