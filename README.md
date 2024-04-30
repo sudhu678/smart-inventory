@@ -17,6 +17,11 @@ The stores commonly re-shuffle their products to get customer attractions and bo
 #### Project Build
 ./gradlew build or IntelliJ/Eclipse project build
 
+#### Application Start
+Run SmartInventoryApplication (Spring-boot) through IDE
+java -jar smart-inventory-0.0.1-SNAPSHOT.jar
+
+on browser hit http://localhost:8080/swagger-ui/index.html#/
 
 ### Reference Documentation
 
