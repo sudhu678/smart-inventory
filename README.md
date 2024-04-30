@@ -36,6 +36,8 @@ on browser hit http://localhost:8080/swagger-ui/index.html#/
 * Plan Controller: Provides endpoints to generate product reshuffling plan by product stock, expiry, and product view
 ![image](https://github.com/sudhu678/smart-inventory/assets/28265483/f45d4c0b-fe08-4989-b573-71626e040412)
 
+* Task Controller: Provides endpoints to access and complete generic and plan tasks for the employees
+![image](https://github.com/sudhu678/smart-inventory/assets/28265483/6e958bfd-5866-4411-9ec9-cf80afecb8ed)
 
 
 ### Reference Documentation
