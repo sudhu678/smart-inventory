@@ -22,6 +22,12 @@ Run SmartInventoryApplication (Spring-boot) through IDE or java -jar smart-inven
 
 on browser hit http://localhost:8080/swagger-ui/index.html#/
 
+### Important Rest APIs
+
+* Product Controller: Provides endpoints to access product information and online order fulfillment
+![image](https://github.com/sudhu678/smart-inventory/assets/28265483/f9a61176-7d6b-4c82-9b52-e1be01b8ce62)
+
+
 ### Reference Documentation
 
 For further reference, please consider the following sections:
