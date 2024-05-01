@@ -88,13 +88,32 @@ public class ProductBusinessServiceImpl implements ProductBusinessService {
                 }
             }
         }
-        return entities.stream().map(productMapper::to).collect(Collectors.toList());
+        return entities.stream().filter(entity -> entity.getCount() > 0)
+                .map(productMapper::to).collect(Collectors.toList());
     }
 
     @Override
     public List<Product> findMatch(String name) {
         List<ProductEntity> entities = productRepository.findMatch(name);
         return entities.stream().map(productMapper::to).collect(Collectors.toList());
+    }
+
+    @Override
+    public Product findBestMatchProduct(String name) {
+        List<ProductEntity> entities = productRepository.findMatch(name);
+        if (entities.isEmpty()) {
+            return null;
+        }
+        int index = Integer.MAX_VALUE;
+        ProductEntity bestMatch = null;
+        for (ProductEntity entity : entities) {
+            int match = entity.getName().toLowerCase().indexOf(name);
+            if (match < index) {
+                index = match;
+                bestMatch = entity;
+            }
+        }
+        return productMapper.to(bestMatch);
     }
 
     @Override

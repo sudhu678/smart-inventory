@@ -16,6 +16,8 @@ public interface ProductBusinessService {
 
     List<Product> findMatch(String name);
 
+    Product findBestMatchProduct(String name);
+
     List<Product> get(String locator);
 
     Product create(Product product);
