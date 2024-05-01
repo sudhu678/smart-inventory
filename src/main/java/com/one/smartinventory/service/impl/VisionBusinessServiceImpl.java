@@ -3,11 +3,18 @@ package com.one.smartinventory.service.impl;
 import com.google.common.collect.Sets;
 import com.one.smartinventory.model.Product;
 import com.one.smartinventory.service.*;
+import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
+import opennlp.tools.postag.POSModel;
+import opennlp.tools.postag.POSTaggerME;
+import opennlp.tools.tokenize.SimpleTokenizer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -24,6 +31,23 @@ public class VisionBusinessServiceImpl implements VisionBusinessService {
     private final GoogleCloudVisionService cloudVisionService;
 
     private final Set<String> people = Set.of("customers", "customer", "people", "man", "men", "woman", "women");
+
+    private POSTaggerME posTagger;
+
+
+    @PostConstruct
+    public void init() {
+        try {
+            InputStream modelIn = GoogleCloudVisionService.class.getResourceAsStream("/en-pos-maxent.bin");
+            if (modelIn != null) {
+                POSModel posModel = new POSModel(modelIn);
+                this.posTagger = new POSTaggerME(posModel);
+            }
+        } catch (IOException e) {
+            log.error("Could not load NLP model", e);
+        }
+
+    }
 
 
     @Autowired
@@ -49,20 +73,29 @@ public class VisionBusinessServiceImpl implements VisionBusinessService {
 
     @Override
     public void scanImage(String projectId, String location, String modelName, String locator, byte[] bytes) {
-        Product product = null;
+        Product bestMatch = null;
+        int length = Integer.MIN_VALUE;
         if (bytes.length > 0) {
-            Set<String> descriptions = cloudVisionService.process(projectId, location, modelName, bytes);
-            for (String name : descriptions) {
-                product = getProduct(name);
+            String description = cloudVisionService.process(projectId, location, modelName, bytes);
+            Set<String> texts = extractText(description);
+            log.info("searchable texts in the image {}", texts);
+            for (String name : texts) {
+                Product product = findBestMatchProduct(name);
                 if (product != null) {
-                    break;
+                    if (name.length() > length) {
+                        bestMatch = product;
+                        length = name.length();
+                    }
                 }
             }
-            if (!Sets.intersection(descriptions, people).isEmpty()) {
+            if (bestMatch != null) {
+                log.info("Best matched product is {}", bestMatch.getName());
+            }
+            if (!Sets.intersection(texts, people).isEmpty()) {
                 visitorBusinessService.updateVisit(locator, LocalDate.now());
             }
         }
-        updateProduct(product, locator);
+        updateProduct(bestMatch, locator);
     }
 
     private void updateProduct(Product product, String locator) {
@@ -73,11 +106,38 @@ public class VisionBusinessServiceImpl implements VisionBusinessService {
         }
     }
 
-    private Product getProduct(String name) {
+    private Product findBestMatchProduct(String name) {
         List<Product> products = productBusinessService.findMatch(name);
         if (products.isEmpty()) {
             return null;
         }
-        return products.get(0);
+        int index = Integer.MAX_VALUE;
+        Product bestMatch = null;
+        for (Product product : products) {
+            int match = product.getName().toLowerCase().indexOf(name);
+            if (match < index) {
+                index = match;
+                bestMatch = product;
+            }
+        }
+        return bestMatch;
+    }
+
+    private Set<String> extractText(String content) {
+        Set<String> texts = new HashSet<>();
+        if (content != null) {
+            SimpleTokenizer tokenizer = SimpleTokenizer.INSTANCE;
+            String[] tokens = tokenizer.tokenize(content.replaceAll("text|image", ""));
+            String[] tags = posTagger.tag(tokens);
+            for (int i = 0; i < tags.length; i++) {
+                if (tokens[i].length() > 2) {
+                    if (tags[i].equals("NNP") || tags[i].equals("NNPS") || tags[i].equals("NN") ||
+                            tags[i].equals("NNS")) {
+                        texts.add(tokens[i].toLowerCase());
+                    }
+                }
+            }
+        }
+        return texts;
     }
 }
