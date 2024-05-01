@@ -118,7 +118,7 @@ public class PlanBusinessServiceImpl implements PlanBusinessService {
                         break;
                     }
                 }
-                if (counter > 0) {
+                if (counter > 0 && !product.getAisle().equals(area.getAisle())) {
                     Task task = createTask(plan, product, area, counter);
                     task = tasksBusinessService.createPlanTask(task);
                     plan.getTasks().add(task);

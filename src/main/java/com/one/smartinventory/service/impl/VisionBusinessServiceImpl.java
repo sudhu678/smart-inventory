@@ -15,7 +15,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDate;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Service
@@ -78,9 +77,13 @@ public class VisionBusinessServiceImpl implements VisionBusinessService {
         if (bytes.length > 0) {
             String description = cloudVisionService.process(projectId, location, modelName, bytes);
             Set<String> texts = extractText(description);
+            if (!Sets.intersection(texts, people).isEmpty()) {
+                visitorBusinessService.updateVisit(locator, LocalDate.now());
+                texts.removeAll(people);
+            }
             log.info("searchable texts in the image {}", texts);
             for (String name : texts) {
-                Product product = findBestMatchProduct(name);
+                Product product = productBusinessService.findBestMatchProduct(name);
                 if (product != null) {
                     if (name.length() > length) {
                         bestMatch = product;
@@ -90,37 +93,20 @@ public class VisionBusinessServiceImpl implements VisionBusinessService {
             }
             if (bestMatch != null) {
                 log.info("Best matched product is {}", bestMatch.getName());
+            } else {
+                log.warn("No product match found!");
             }
-            if (!Sets.intersection(texts, people).isEmpty()) {
-                visitorBusinessService.updateVisit(locator, LocalDate.now());
-            }
+
         }
         updateProduct(bestMatch, locator);
     }
 
     private void updateProduct(Product product, String locator) {
-        if (product != null && !product.getAisle().equals(locator)) {
+        if (product != null && product.getCount() > 0 && !product.getAisle().equals(locator)) {
             product.setCount(product.getCount() - 1);
             productBusinessService.create(product);
             tasksBusinessService.createGenericTask(product.getProductId(), locator, product.getAisle(), 1);
         }
-    }
-
-    private Product findBestMatchProduct(String name) {
-        List<Product> products = productBusinessService.findMatch(name);
-        if (products.isEmpty()) {
-            return null;
-        }
-        int index = Integer.MAX_VALUE;
-        Product bestMatch = null;
-        for (Product product : products) {
-            int match = product.getName().toLowerCase().indexOf(name);
-            if (match < index) {
-                index = match;
-                bestMatch = product;
-            }
-        }
-        return bestMatch;
     }
 
     private Set<String> extractText(String content) {
